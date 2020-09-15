@@ -1,5 +1,5 @@
 import path from "path";
-import fs from "fs/promises";
+import fs from "fs";
 import parse from "csv-parse/lib/sync";
 
 import CreateTransactionService from "./CreateTransactionService";
@@ -22,7 +22,7 @@ class ImportTransactionsService {
   async execute({ filename }: ImportTransactionsServiceOptions): Promise<Transaction[]> {
 
     const fileName = path.resolve(uploadConfig.directory, filename);
-    const fileBuffer = await fs.readFile(fileName, {
+    const fileBuffer = await fs.promises.readFile(fileName, {
       encoding: 'utf-8',
     });
     const stringData = fileBuffer.toString();
@@ -58,7 +58,7 @@ class ImportTransactionsService {
       transactions.push(newTransaction);
     }
 
-    await fs.unlink(fileName);
+    await fs.promises.unlink(fileName);
 
     return transactions;
   }
